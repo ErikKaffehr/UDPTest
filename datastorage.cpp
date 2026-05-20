@@ -19,6 +19,7 @@
 #include <bits/stdc++.h>
 DataStorage::DataStorage()
 {
+    _time_zero = time(NULL);
     connect(&_timer, SIGNAL(timeout()), this, SLOT(timeout()));
     _time_passed = 0;
     _timer.setInterval(1000);
