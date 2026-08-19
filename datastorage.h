@@ -58,6 +58,7 @@ public slots:
    void timeout();
    void store();
    void restore();
+   void fakeData();
 
 };
 

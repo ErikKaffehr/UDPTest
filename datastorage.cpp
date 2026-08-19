@@ -21,6 +21,7 @@ DataStorage::DataStorage()
 {
     _time_zero = time(NULL);
     connect(&_timer, SIGNAL(timeout()), this, SLOT(timeout()));
+    connect(&_timer, SIGNAL(timeout()), this, SLOT(fakeData()));
     _time_passed = 0;
     _timer.setInterval(1000);
     _timer.start();
@@ -124,6 +125,10 @@ void DataStorage::store()
     doc.appendChild(top);
     DPVMap::iterator it;
     //VariableNames variables;
+    QDomElement time_stamp = doc.createElement("TimeStamp");
+    qlonglong tz = _time_zero;
+    time_stamp.setAttribute("TimeZero", tz);
+    top.appendChild(time_stamp);
     for (it = _dpv_map.begin(); it != _dpv_map.end(); it++)
     {
         std::string vname = it->first;
@@ -229,4 +234,16 @@ void DataStorage::restore()
 
         QGuiApplication::restoreOverrideCursor();
 
+}
+
+void DataStorage::fakeData()
+{
+    char textbuf[128];
+    static int iter = 0;
+    float T1 = 20 + 0.01 * iter;
+    float T2 = 21 + 0.01 * iter;
+    float T3 = 22 + 0.01 * iter;
+    iter++;
+    sprintf(textbuf, "T1 %f T2 %f T3 %f", T1, T2, T3);
+    DataStorage::getInstance()->addDataFromBuffer(textbuf, strlen(textbuf));
 }

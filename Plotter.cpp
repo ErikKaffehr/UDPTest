@@ -138,7 +138,7 @@ void HorizontalAxis::paintEvent(QPaintEvent*)
         x = remap(v);
         p.drawLine(x, ypos, x, ypos +10);
         time_t t = v;
-        struct tm tm = *gmtime(&t);              // UTC broken-down time
+        struct tm tm = *localtime(&t);              // UTC broken-down time
         char buf[32];
         strftime(buf, sizeof buf, "%d/%m %H:%M", &tm);
         printf("%s\n", buf);
@@ -228,7 +228,7 @@ ControlPanel::ControlPanel(Plotter* parent)
     _thermostatOn = new QPushButton("Thermostat Passive", this);
     _thermostatOn->setCheckable(true);
     _thermostatMin = new QLineEdit("20", this);
-    _thermostatMax = new QLineEdit("22", this);
+    _thermostatMax = new QLineEdit("28", this);
     _tl = new QGridLayout(this);
 
     _tl->addWidget(_backwardButton, 0, 0);
@@ -328,6 +328,10 @@ void Plotter::refresh()
             Polygon* polygon = _panel->getPolygon(i);
             polygon->resize(length);
             DataPointVector::iterator it;
+            DataPointVector::iterator last = pdpv->end() -1;
+            DataPoint last_dp = (*last);
+            int64_t last_time = last_dp.time();
+            _time_axis->shiftLimits(last_time);
             int pos = 0;
             for (it = pdpv->begin(); it < pdpv->end(); it++) {
                 float v;
@@ -338,7 +342,7 @@ void Plotter::refresh()
                 v = pdp.value();
 
                 t = pdp.time();
-                _time_axis->shiftLimits(t);
+                //_time_axis->shiftLimits(t);
                 QPoint p((int) _time_axis->remap(t), (int) _axes[i]->remap(v));
                 (*polygon)[pos++] = p;
             }
