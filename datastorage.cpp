@@ -243,7 +243,10 @@ void DataStorage::fakeData()
     float T1 = 20 + 0.01 * iter;
     float T2 = 21 + 0.01 * iter;
     float T3 = 22 + 0.01 * iter;
+    float T4 = 23 + 0.01 * iter;
+    float T5 = 24 + 0.01 * iter;
+    float T6 = 24 + 0.01 * iter;
     iter++;
-    sprintf(textbuf, "T1 %f T2 %f T3 %f", T1, T2, T3);
+    sprintf(textbuf, "T1 %f T2 %f T3 %f T4 %f T5 %f T6 %f Voltage %f", T1, T2, T3, T4, T5, T6, 13.3);
     DataStorage::getInstance()->addDataFromBuffer(textbuf, strlen(textbuf));
 }

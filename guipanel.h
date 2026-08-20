@@ -28,7 +28,7 @@ private:
 
 };
 
-class GUIPanel : public QMainWindow
+class GUIPanel : public QWidget
 {
     Q_OBJECT
 public:
